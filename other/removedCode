@@ -1,0 +1,60 @@
+       Class AiLogic:
+
+        //check if block is needed
+        int diffXPosition = playerPosition[0].getPositionY() - playerPosition[1].getPositionY();
+        int diffYPosition = playerPosition[0].getPositionX() - playerPosition[1].getPositionY();
+        if((diffXPosition == 1 || diffXPosition == -1) && (diffYPosition == 1 || diffYPosition == -1)){
+            //check bottom left to top right
+            for(int i = 0; i < 2; i++) {
+                if(!field[i][i].isPc() && field[i][i].isTicked()){
+                    field = makeTic(2,2, true, true);
+                }
+            }
+            //same in reverse order ToDo: functions for repetitive code like this one
+            for(int i = 2; i > 0; i--) {
+                if(!field[i][i].isPc() && field[i][i].isTicked()){
+                    field = makeTic(0,0, true, true);
+                }
+            }
+            //check from bottom right to top left
+            for(int i = 2, j = 0; i > 0; i--, j++) {
+                if(!field[i][j].isPc() && field[i][j].isTicked()){
+                    field = makeTic(0,2, true, true);
+                }
+            }
+            //same in reverse order
+            for(int i = 0, j = 2; j > 0; i++, j--) {
+                if(!field[i][j].isPc() && field[i][j].isTicked()){
+                    field = makeTic(2,0, true, true);
+                }
+            }
+        }
+        //vom Spieler gewählte Felder befinden sich auf der gleichen X-Position
+        if(diffXPosition == 0){
+            if( (diffYPosition == 2 || diffYPosition == -2) && !(field[playerPosition[0].getPositionX()][1].isPc())){
+                // wenn Diff 2 / -2 auftritt muss Feld in der Mitte leer sein
+                field = makeTic(playerPosition[0].getPositionX(), 1, true, true);
+            }
+                //wenn nicht müssen entweder Felder 0 oder 2 getickt worden sein, prüfe 0
+            if (playerPosition[0].getPositionY() == 0 && !(field[playerPosition[0].getPositionX()][2].isPc())){
+                field = makeTic(playerPosition[0].getPositionX(), 2, true, true);
+            }
+                //einzig übrig gebliebene Y-Position ist die 2
+            else if(!(field[playerPosition[0].getPositionX()][0].isPc()))
+                field = makeTic(playerPosition[0].getPositionX(), 0, true, true);
+        }
+        //vom Spieler gewählte Felder befinden sich auf der gleichen Y-Position
+        if(diffYPosition == 0){
+            //Prüfe ob X-Position in Mitte
+            if( (diffXPosition == 2 || diffXPosition == -2) && !(field[1][playerPosition[0].getPositionY()].isPc())){
+                // wenn Diff 2 / -2 auftritt muss Feld in der Mitte leer sein
+                field = makeTic(1, playerPosition[0].getPositionY(), true, true);
+            }
+            //wenn nicht müssen entweder Felder 0 oder 2 getickt worden sein, prüfe 0
+            if (playerPosition[0].getPositionY() == 0 && !(field[2][playerPosition[0].getPositionY()].isPc())){
+                field = makeTic(2, playerPosition[0].getPositionY(), true, true);
+            }
+            // zwei wurde getickt, mache tick bei 0
+            else if(!(field[0][playerPosition[0].getPositionY()].isPc()))
+                field = makeTic(0, playerPosition[0].getPositionY(), true, true);
+        }

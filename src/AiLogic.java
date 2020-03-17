@@ -113,46 +113,23 @@ public class AiLogic extends GameLogic{
      */
 
     public void reactToSecondMove(){
-        //check if block is needed
-        int diffXPosition = playerPosition[0].getPositionY() - playerPosition[1].getPositionY();
-        int diffYPosition = playerPosition[0].getPositionX() - playerPosition[1].getPositionY();
-        if((diffXPosition == 1 || diffXPosition == -1) && (diffYPosition == 1 || diffYPosition == -1)){
-            //Verkettung befindet sich in der diagonalen
-
-        }
-        if(diffXPosition == 0){
-            if( (diffYPosition == 2 || diffYPosition == -2) && !(field[playerPosition[0].getPositionX()][1].isPc())){
-                // wenn Diff 2 / -2 auftritt muss Feld in der Mitte leer sein
-                makeTic(playerPosition[0].getPositionX(), 1, true, true);
+        for(TwoInARow f : TwoInARow.values()){
+            if((f.firstXPosition == playerPosition[0].getPositionX() &&
+                 f.firstYPosition == playerPosition[0].getPositionY() &&
+                  f.secondXPosition == playerPosition[1].getPositionX() &&
+                    f.secondYPosition == playerPosition[1].getPositionY()) ||
+                     (f.firstXPosition == playerPosition[1].getPositionX() &&
+                       f.firstYPosition == playerPosition[1].getPositionY() &&
+                        f.secondXPosition == playerPosition[0].getPositionX() &&
+                         f.secondYPosition == playerPosition[0].getPositionY())){
+                field = makeTic(f.blockX, f.blockY, true, true);
             }
-                //wenn nicht müssen entweder Felder 0 oder 2 getickt worden sein, prüfe 0
-            if (playerPosition[0].getPositionY() == 0 && !(field[playerPosition[0].getPositionX()][2].isPc())){
-                makeTic(playerPosition[0].getPositionX(), 2, true, true);
-            }
-            else if(!(field[playerPosition[0].getPositionX()][0].isPc()))
-                makeTic(playerPosition[0].getPositionX(), 0, true, true);
-            //Verkettung befindet sich in der selben Spalte
-        }
-        if(diffYPosition == 0){
-            //Verkettung befindet sich in der selben Zeile
-            if( (diffXPosition == 2 || diffXPosition == -2) && !(field[1][playerPosition[0].getPositionY()].isPc())){
-                // wenn Diff 2 / -2 auftritt muss Feld in der Mitte leer sein
-                makeTic(1, playerPosition[0].getPositionY(), true, true);
-            }
-            //wenn nicht müssen entweder Felder 0 oder 2 getickt worden sein, prüfe 0
-            if (playerPosition[0].getPositionY() == 0 && !(field[2][playerPosition[0].getPositionY()].isPc())){
-                makeTic(2, playerPosition[0].getPositionY(), true, true);
-            }
-            else if(!(field[0][playerPosition[0].getPositionY()].isPc()))
-                makeTic(0, playerPosition[0].getPositionY(), true, true);
-                //Verkettung befindet sich in der selben Spalte
-
-        }
-
+         }
     }
 
     public void reactToThirdMove(){
-        //...
+
+
     }
 
     private void reactToFourthMove() {
@@ -162,5 +139,7 @@ public class AiLogic extends GameLogic{
     private void reactToFifthMove() {
         //...
     }
+
+
 
 }
