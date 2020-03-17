@@ -112,7 +112,8 @@ public class AiLogic extends GameLogic{
      * ToDo: Alle diagonalen Positionen durchgehen auch die unsinnigen wie zwei edge Kreuze
      */
 
-    public void reactToSecondMove(){
+    public GameField[][] reactToSecondMove(){
+        //block possible game finishing moves
         for(TwoInARow f : TwoInARow.values()){
             if((f.firstXPosition == playerPosition[0].getPositionX() &&
                  f.firstYPosition == playerPosition[0].getPositionY() &&
@@ -122,9 +123,24 @@ public class AiLogic extends GameLogic{
                        f.firstYPosition == playerPosition[1].getPositionY() &&
                         f.secondXPosition == playerPosition[0].getPositionX() &&
                          f.secondYPosition == playerPosition[0].getPositionY())){
-                field = makeTic(f.blockX, f.blockY, true, true);
+               return field = makeTic(f.blockX, f.blockY, true, true);
             }
          }
+        for (PositionDetails g : PositionDetails.values()){
+            //if Pc opened center -> take one of the edges next
+            if(g.position == PositionType.center && field[g.position_x][g.position_y].isPc()){
+                for(PositionDetails h : PositionDetails.values()){
+                    if(g.position == PositionType.edge && !field[g.position_x][g.position_y].isTicked()){
+                        return field = makeTic(g.position_x, g.position_y, true, true);
+                    }
+                }
+            }
+            //if Pc opened corner -> take neighboured edges
+            if(g.position == PositionType.corner && field[g.position_x][g.position_y].isPc()){
+
+            }
+        }
+        return field;
     }
 
     public void reactToThirdMove(){
