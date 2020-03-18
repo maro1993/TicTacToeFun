@@ -20,13 +20,13 @@ public enum PositionDetails {
 
     corner4(2,2, PositionType.corner, 4, new int[]{4, 3}),
 
-    edge1(1,0, PositionType.edge, 1, null),
+    edge1(1,0, PositionType.edge, 1, new int[]{1, 2}),
 
-    edge2(0,1, PositionType.edge, 2, null),
+    edge2(0,1, PositionType.edge, 2, new int[]{1, 3}),
 
-    edge3(2,1, PositionType.edge,3, null ),
+    edge3(2,1, PositionType.edge,3, new int[]{2, 4}),
 
-    edge4(1,2, PositionType.edge, 4, null),
+    edge4(1,2, PositionType.edge, 4, new int[]{4, 3}),
 
     center(1,1, PositionType.center, 1, null);
 

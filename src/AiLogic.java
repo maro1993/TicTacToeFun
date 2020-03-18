@@ -33,11 +33,11 @@ public class AiLogic extends GameLogic{
         switch(PlayerMoveCounter) {
             case 1:
                 //Methode beim first Tick des Spielers
-                reactToFirstMove();
+                field = reactToFirstMove();
                 break;
             case 2:
                 //Methode beim second Tick des Spielers
-                reactToSecondMove();
+                field = reactToSecondMove();
                 break;
             case 3:
                 //Methode beim third Tick des Spielers
@@ -130,22 +130,21 @@ public class AiLogic extends GameLogic{
             //if Pc opened center -> take one of the edges next
             if(g.position == PositionType.center && field[g.position_x][g.position_y].isPc()){
                 for(PositionDetails h : PositionDetails.values()){
-                    if(g.position == PositionType.edge && !field[g.position_x][g.position_y].isTicked()){
-                        return field = makeTic(g.position_x, g.position_y, true, true);
+                    if(h.position == PositionType.edge && !field[h.position_x][h.position_y].isTicked()){
+                        return field = makeTic(h.position_x, h.position_y, true, true);
                     }
                 }
             }
-            //if Pc opened corner -> take neighboured edges
-            if(g.position == PositionType.corner && field[g.position_x][g.position_y].isPc()){
-
-            }
+            //if Pc opened corner -> if center is taken -> take neighboured edges next if they are not blocked by the player
+            field = checkNeighboursAndMakeTic(g, PositionType.corner);
+            //if Pc opened edge -> if center is taken ->take neighboured corners next if they are not blocked by the player
+            field = checkNeighboursAndMakeTic(g, PositionType.edge);
         }
-        return field;
+        return checkOtherPositionsAndMakeTic();
     }
 
     public void reactToThirdMove(){
-
-
+        //...
     }
 
     private void reactToFourthMove() {
@@ -156,6 +155,30 @@ public class AiLogic extends GameLogic{
         //...
     }
 
+    private GameField[][] checkOtherPositionsAndMakeTic(){
+        for(int x = 0; x < 3; x++){
+            for(int y = 0; y < 3; y++) {
+                if(!field[x][y].isPc() && !field[x][y].isTicked()){
+                    return field = makeTic(x,y,true,true);
+                }
+            }
+        }
+        return field;
+    }
 
-
+    private GameField[][] checkNeighboursAndMakeTic(PositionDetails g, PositionType positionType){
+        if(!field[1][1].isTicked()){
+            return field = makeTic(1,1,true,true);
+        }
+        if(g.position == positionType && field[g.position_x][g.position_y].isPc()) {
+            for (int i = 0; i < g.neighbour.length; i++) {
+                for (PositionDetails e : PositionDetails.values()) {
+                    if (e.index == g.neighbour[i] && !field[e.position_x][e.position_y].isTicked()) {
+                        return field = makeTic(e.position_x, e.position_y, true, true);
+                    }
+                }
+            }
+        }
+        return field;
+    }
 }
